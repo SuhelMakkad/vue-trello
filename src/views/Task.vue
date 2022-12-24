@@ -1,8 +1,13 @@
 <template>
   <div class="task-view">
-    <div class="flex flex-col flex-grow justify-between px-4">
-      {{ task.name }}
+    <div class="flex flex-col flex-grow justify-between px-4 mt-4">
+      <span> {{ task.name }} </span>
+      <textarea :value="task.description" class="
+        relative border mt-2 h-64 bg-transparent leading-normal
+        border-none focus:border-none focus:outline-none active:border-none active:outline-none 
+      " />
     </div>
+
   </div>
 </template>
 
@@ -20,10 +25,9 @@ const task = computed(() => getTask.value(route.params.id));
 
 if (!task.value) {
   router.replace({
-    name: "Board"
-  })
+    name: "Board",
+  });
 }
-
 </script>
 
 <style lang="css">
