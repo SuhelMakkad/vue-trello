@@ -1,10 +1,11 @@
 import { createStore } from "vuex";
+import type { Store } from "vuex";
 import { v4 as uuid } from "uuid";
 
 import { saveStatePlugin } from "../utils";
 import defaultBoard from "../default-board";
 
-import type { BoardType } from "./types";
+import type { StoreStateType, BoardType } from "./types";
 
 const board: BoardType = JSON.parse(localStorage.getItem("board")!) || defaultBoard;
 
@@ -16,8 +17,8 @@ const store = {
   },
 
   getters: {
-    getTask(state) {
-      return (id) => {
+    getTask(state: StoreStateType) {
+      return (id: string) => {
         console.log("GOT ID");
 
         for (const column of state.board.columns) {

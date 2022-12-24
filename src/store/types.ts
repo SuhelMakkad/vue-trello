@@ -7,7 +7,7 @@ export type Task = {
 
 export type BoardColumn = {
   name: string;
-  tasks: Task;
+  tasks: Task[];
 };
 
 export type BoardType = {
