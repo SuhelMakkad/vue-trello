@@ -1,60 +1,25 @@
 <template>
-    <div class="board">
-      <div class="flex flex-row items-start">
-        <div
-          class="column"
-          v-for="(column, $columnIndex) of board.columns"
-          :key="$columnIndex"
-        >
-          <div class="flex items-center mb-2 font-bold">
-            {{ column.name }}
-          </div>
-          <div class="list-reset">
-            <div
-              class="task"
-              v-for="(task, $taskIndex) of column.tasks"
-              :key="$taskIndex"
-            >
-              <span class="w-full flex-no-shrink font-bold">
-                {{ task.name }}
-              </span>
-              <p
-                v-if="task.description"
-                class="w-full flex-no-shrink mt-1 text-sm"
-              >
-                {{ task.description }}
-              </p>
-            </div>
-          </div>
-        </div>
-      </div>
+  <div v-if="task" class="task-view">
+    <div class="flex flex-col flex-grow justify-between px-4">
+      {{ task.name }}
     </div>
-  </template>
-  
-  <script lang="ts">
-  import { mapState } from 'vuex'
-  
-  export default {
-    computed: mapState(['board'])
-  }
-  </script>
-  
-  <style lang="css">
-  .task {
-    @apply flex items-center flex-wrap shadow mb-2 py-2 px-2 rounded bg-white text-grey-darkest no-underline;
-  }
-  
-  .column {
-    @apply bg-grey-light p-2 mr-4 text-left shadow rounded;
-    min-width: 350px;
-  }
-  
-  .board {
-    @apply p-4 bg-teal-dark h-full overflow-auto;
-  }
-  
-  .task-bg {
-    @apply pin absolute;
-    background: rgba(0,0,0,0.5);
-  }
-  </style>
+  </div>
+</template>
+
+<script setup lang="ts">
+import { computed } from "vue";
+import { useStore } from "vuex";
+import { useRoute } from "vue-router";
+
+const store = useStore();
+const route = useRoute();
+
+const getTask = computed(() => store.getters.getTask);
+const task = computed(() => getTask.value(route.params.id));
+</script>
+
+<style lang="css">
+.task-view {
+  @apply relative top-0 bottom-0 left-0 right-0 flex bg-white m-32 mx-auto text-left rounded shadow max-w-3xl;
+}
+</style>

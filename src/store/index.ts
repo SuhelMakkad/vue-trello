@@ -15,6 +15,20 @@ const store = {
     board,
   },
 
+  getters: {
+    getTask(state) {
+      return (id) => {
+        console.log("GOT ID");
+
+        for (const column of state.board.columns) {
+          for (const task of column.tasks) {
+            if (task.id === id) return task;
+          }
+        }
+      };
+    },
+  },
+
   mutations: {},
 };
 

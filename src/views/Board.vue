@@ -18,14 +18,22 @@
       </div>
     </div>
   </div>
+
+  <div v-if="isTaskOpen" class="task-bg">
+    <router-view />
+  </div>
 </template>
 
-<script lang="ts">
-import { mapState } from "vuex";
+<script setup lang="ts">
+import { computed } from "vue";
+import { useStore } from "vuex";
+import { useRoute } from "vue-router";
 
-export default {
-  computed: mapState(["board"]),
-};
+const store = useStore();
+const route = useRoute();
+
+const board = computed(() => store.state.board);
+const isTaskOpen = computed(() => route.name === "Task");
 </script>
 
 <style lang="css">
@@ -47,7 +55,7 @@ export default {
 }
 
 .task-bg {
-  @apply absolute;
+  @apply fixed top-0 bottom-0 right-0 left-0;
   background: rgba(0, 0, 0, 0.5);
 }
 </style>
