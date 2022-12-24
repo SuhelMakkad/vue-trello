@@ -19,8 +19,6 @@ const store = {
   getters: {
     getTask(state: StoreStateType) {
       return (id: string) => {
-        console.log("GOT ID");
-
         for (const column of state.board.columns) {
           for (const task of column.tasks) {
             if (task.id === id) return task;
