@@ -4,10 +4,28 @@ export default {
   name: "workshop",
   columns: [
     {
-      name: "todo",
+      name: "backlog",
       tasks: [
         {
           description: "",
+          name: "first task",
+          id: uuid(),
+          userAssigned: null,
+        },
+        {
+          description: "",
+          name: "Say hi",
+          id: uuid(),
+          userAssigned: null,
+        },
+      ],
+    },
+    {
+      name: "todo",
+      tasks: [
+        {
+          description:
+            "Lorem ipsum dolor sit amet consectetur, adipisicing elit. Dolor velit explicabo sapiente dignissimos, nobis labore?",
           name: "first task",
           id: uuid(),
           userAssigned: null,

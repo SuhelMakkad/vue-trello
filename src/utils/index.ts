@@ -1,4 +1,4 @@
-import { Store } from "vuex";
+import type { Store } from "vuex";
 import type { StoreStateType } from "../store/types";
 
 export const saveStatePlugin = (store: Store<StoreStateType>) => {
