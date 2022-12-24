@@ -6,20 +6,26 @@
       </div>
 
       <div class="list-reset">
-        <div class="task" v-for="task in column.tasks" :key="task.id">
-          <span class="w-full flex-shrink-0 font-medium">
-            {{ task.name }}
-          </span>
+        <router-link
+          v-for="task in column.tasks"
+          :key="task.id"
+          :to="{ name: 'Task', params: { id: task.id } }"
+        >
+          <div class="task">
+            <span class="w-full flex-shrink-0 font-medium">
+              {{ task.name }}
+            </span>
 
-          <span v-if="task.description" class="w-full flex-shrink-0 mt-4">
-            {{ task.description }}
-          </span>
-        </div>
+            <span v-if="task.description" class="w-full flex-shrink-0 mt-4">
+              {{ task.description }}
+            </span>
+          </div>
+        </router-link>
       </div>
     </div>
-  </div>
+  </div> 
 
-  <div v-if="isTaskOpen" class="task-bg">
+  <div v-if="isTaskOpen" class="task-bg" @click.self="closeModal">
     <router-view />
   </div>
 </template>
@@ -27,13 +33,20 @@
 <script setup lang="ts">
 import { computed } from "vue";
 import { useStore } from "vuex";
-import { useRoute } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
 
 const store = useStore();
 const route = useRoute();
+const router = useRouter();
 
 const board = computed(() => store.state.board);
 const isTaskOpen = computed(() => route.name === "Task");
+
+const closeModal = () => {
+  router.push({
+    name: "Board"
+  })
+}
 </script>
 
 <style lang="css">
