@@ -1,5 +1,4 @@
 import { createStore } from "vuex";
-import type { Store } from "vuex";
 import { v4 as uuid } from "uuid";
 
 import { saveStatePlugin } from "../utils";
