@@ -1,5 +1,5 @@
 <template>
-  <div v-if="task" class="task-view">
+  <div class="task-view">
     <div class="flex flex-col flex-grow justify-between px-4">
       {{ task.name }}
     </div>
@@ -9,13 +9,21 @@
 <script setup lang="ts">
 import { computed } from "vue";
 import { useStore } from "vuex";
-import { useRoute } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
 
 const store = useStore();
+const router = useRouter();
 const route = useRoute();
 
 const getTask = computed(() => store.getters.getTask);
 const task = computed(() => getTask.value(route.params.id));
+
+if (!task.value) {
+  router.replace({
+    name: "Board"
+  })
+}
+
 </script>
 
 <style lang="css">
