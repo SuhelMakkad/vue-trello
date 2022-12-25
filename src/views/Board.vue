@@ -1,17 +1,30 @@
 <template>
   <div class="board">
-    <div class="column" v-for="column in board.columns" :key="column.name">
+    <div
+      class="column"
+      v-for="(column, columnIndex) in board.columns"
+      :key="column.name"
+      @drop="moveTask($event, column.tasks)"
+      @dragover.prevent
+      @dragenter.prevent
+    >
       <div class="flex items-center mb-2 font-bold">
         {{ column.name }}
       </div>
 
       <div class="list-reset">
-        <router-link
-          v-for="task in column.tasks"
-          :key="task.id"
-          :to="{ name: 'Task', params: { id: task.id } }"
+        <div
+          v-for="(task, taskIndex) in column.tasks"
+          class="cursor-pointer"
+          :key="task?.id"
+          @click="openModal(task?.id)"
         >
-          <div class="task">
+          <div
+            v-if="task"
+            class="task"
+            :draggable="true"
+            @dragstart="pickupTask($event, taskIndex, columnIndex)"
+          >
             <span class="w-full flex-shrink-0 font-medium">
               {{ task.name }}
             </span>
@@ -20,7 +33,7 @@
               {{ task.description }}
             </span>
           </div>
-        </router-link>
+        </div>
 
         <input
           type="text"
@@ -54,6 +67,8 @@ const router = useRouter();
 const board = computed(() => store.state.board);
 const isTaskOpen = computed(() => route.name === "Task");
 
+const openModal = (id: string) => router.push({ name: "Task", params: { id } });
+
 const closeModal = () => {
   router.push({
     name: "Board",
@@ -76,6 +91,35 @@ const createTask = (event: KeyboardEvent, columnName: string) => {
   });
 
   target.value = "";
+};
+
+const pickupTask = (event: DragEvent, taskIndex: number, columnIndex: number) => {
+  if (!event.dataTransfer) return;
+
+  event.dataTransfer.effectAllowed = "move";
+  event.dataTransfer.dropEffect = "move";
+
+  console.log({
+    taskIndex,
+    columnIndex,
+  });
+
+  event.dataTransfer.setData("task-index", taskIndex.toString());
+  event.dataTransfer.setData("from-column-index", columnIndex.toString());
+};
+
+const moveTask = (event: DragEvent, toTasks: Task[]) => {
+  if (!event.dataTransfer) return;
+
+  const taskIndex = +event.dataTransfer.getData("task-index");
+  const fromColumnIndex = +event.dataTransfer.getData("from-column-index");
+  const fromTasks = board.value.columns[fromColumnIndex].tasks;
+
+  store.commit("MOVE_TASK", {
+    fromTasks,
+    toTasks,
+    taskIndex,
+  });
 };
 </script>
 

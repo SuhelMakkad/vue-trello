@@ -41,6 +41,17 @@ const store = {
     ) {
       task[key] = value;
     },
+
+    MOVE_TASK(
+      state: StoreStateType,
+      { fromTasks, toTasks, taskIndex }: { fromTasks: Task[]; toTasks: Task[]; taskIndex: number }
+    ) {
+      const taskMove = fromTasks.splice(taskIndex, 1)[0];
+
+      console.log({ fromTasks, toTasks, taskIndex, taskMove });
+
+      toTasks.push(taskMove);
+    },
   },
 };
 
