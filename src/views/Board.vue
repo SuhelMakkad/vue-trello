@@ -21,9 +21,16 @@
             </span>
           </div>
         </router-link>
+
+        <input
+          type="text"
+          placeholder="+ Enter New Task"
+          class="w-full p-2 bg-transparent border-none outline-none"
+          @keyup.enter="createTask($event, column.name)"
+        />
       </div>
     </div>
-  </div> 
+  </div>
 
   <div v-if="isTaskOpen" class="task-bg" @click.self="closeModal">
     <router-view />
@@ -35,7 +42,12 @@ import { computed } from "vue";
 import { useStore } from "vuex";
 import { useRoute, useRouter } from "vue-router";
 
-const store = useStore();
+import { v4 as uuid } from "uuid";
+
+import type { StoreStateType } from "../store/types";
+import type { Task } from "../store/types";
+
+const store = useStore<StoreStateType>();
 const route = useRoute();
 const router = useRouter();
 
@@ -44,9 +56,27 @@ const isTaskOpen = computed(() => route.name === "Task");
 
 const closeModal = () => {
   router.push({
-    name: "Board"
-  })
-}
+    name: "Board",
+  });
+};
+
+const createTask = (event: KeyboardEvent, columnName: string) => {
+  const target = event.target as HTMLInputElement;
+  const value = target.value;
+
+  const task: Task = {
+    id: uuid(),
+    description: "",
+    name: value,
+  };
+
+  store.commit("CREATE_TASK", {
+    task,
+    columnName,
+  });
+
+  target.value = "";
+};
 </script>
 
 <style lang="css">

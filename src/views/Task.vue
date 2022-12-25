@@ -1,13 +1,21 @@
 <template>
   <div class="task-view">
-    <div class="flex flex-col flex-grow justify-between px-4 mt-4">
-      <span> {{ task.name }} </span>
-      <textarea :value="task.description" class="
-        relative border mt-2 h-64 bg-transparent leading-normal
-        border-none focus:border-none focus:outline-none active:border-none active:outline-none 
-      " />
+    <div class="flex flex-col flex-grow justify-between px-6 my-4">
+      <input
+        type="text"
+        class="text-2xl capitalize font-medium"
+        :value="task.name"
+        @input="updateTaskValue($event, 'name')"
+      />
+      <textarea
+        :value="task.description"
+        class="
+          mt-2 h-64 bg-transparent leading-normal 
+          border-none focus:border-none focus:outline-none active:border-none active:outline-none
+        "
+        @input="updateTaskValue($event, 'description')"
+      />
     </div>
-
   </div>
 </template>
 
@@ -28,6 +36,17 @@ if (!task.value) {
     name: "Board",
   });
 }
+
+const updateTaskValue = (event: Event, key: string) => {
+  const target = event.target as HTMLInputElement;
+  const value = target.value;
+
+  store.commit("UPDATE_TASK", {
+    task: task.value,
+    key,
+    value,
+  });
+};
 </script>
 
 <style lang="css">

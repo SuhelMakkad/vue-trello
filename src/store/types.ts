@@ -2,7 +2,7 @@ export type Task = {
   description: string;
   name: string;
   id: string;
-  userAssigned: null;
+  userAssigned?: string | null;
 };
 
 export type BoardColumn = {
