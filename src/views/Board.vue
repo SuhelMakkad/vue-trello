@@ -4,9 +4,11 @@
       class="column"
       v-for="(column, columnIndex) in board.columns"
       :key="column.name"
-      @drop="moveTask($event, column.tasks)"
+      :draggable="true"
+      @drop="moveTaskOrColumn($event, columnIndex, column.tasks)"
       @dragover.prevent
       @dragenter.prevent
+      @dragstart.self="pickupColumn($event, columnIndex)"
     >
       <div class="flex items-center mb-2 font-bold">
         {{ column.name }}
@@ -99,13 +101,31 @@ const pickupTask = (event: DragEvent, taskIndex: number, columnIndex: number) =>
   event.dataTransfer.effectAllowed = "move";
   event.dataTransfer.dropEffect = "move";
 
-  console.log({
-    taskIndex,
-    columnIndex,
-  });
-
   event.dataTransfer.setData("task-index", taskIndex.toString());
   event.dataTransfer.setData("from-column-index", columnIndex.toString());
+  event.dataTransfer.setData("drag-type", "task");
+};
+
+const pickupColumn = (event: DragEvent, fromColumnIndex: number) => {
+  if (!event.dataTransfer) return;
+
+  event.dataTransfer.effectAllowed = "move";
+  event.dataTransfer.dropEffect = "move";
+
+  event.dataTransfer.setData("column-index", fromColumnIndex.toString());
+  event.dataTransfer.setData("drag-type", "column");
+};
+
+const moveTaskOrColumn = (event: DragEvent, columnIndex: number, toTasks: Task[]) => {
+  if (!event.dataTransfer) return;
+
+  const type = event.dataTransfer.getData("drag-type");
+
+  if (type === "task") {
+    moveTask(event, toTasks);
+  } else if (type === "column") {
+    moveColumn(event, columnIndex);
+  }
 };
 
 const moveTask = (event: DragEvent, toTasks: Task[]) => {
@@ -119,6 +139,17 @@ const moveTask = (event: DragEvent, toTasks: Task[]) => {
     fromTasks,
     toTasks,
     taskIndex,
+  });
+};
+
+const moveColumn = (event: DragEvent, toColumnIndex: number) => {
+  if (!event.dataTransfer) return;
+
+  const fromColumnIndex = +event.dataTransfer.getData("column-index");
+
+  store.commit("MOVE_COLUMN", {
+    fromColumnIndex,
+    toColumnIndex,
   });
 };
 </script>

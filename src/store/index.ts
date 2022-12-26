@@ -4,7 +4,7 @@ import { v4 as uuid } from "uuid";
 import { saveStatePlugin } from "../utils";
 import defaultBoard from "../default-board";
 
-import type { StoreStateType, BoardType, Task } from "./types";
+import type { StoreStateType, BoardType, Task, BoardColumn } from "./types";
 
 const board: BoardType = JSON.parse(localStorage.getItem("board")!) || defaultBoard;
 
@@ -48,9 +48,17 @@ const store = {
     ) {
       const taskMove = fromTasks.splice(taskIndex, 1)[0];
 
-      console.log({ fromTasks, toTasks, taskIndex, taskMove });
-
       toTasks.push(taskMove);
+    },
+
+    MOVE_COLUMN(
+      state: StoreStateType,
+      { fromColumnIndex, toColumnIndex }: { fromColumnIndex: number; toColumnIndex: number }
+    ) {
+      const columns = state.board.columns;
+      const columnToMove = columns.splice(fromColumnIndex, 1)[0];
+
+      columns.splice(toColumnIndex, 0, columnToMove);
     },
   },
 };
