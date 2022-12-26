@@ -1,5 +1,8 @@
 <template>
+  <h1 class="px-4 py-2 text-white text-3xl font-medium">My Board</h1>
+
   <div class="board">
+    
     <BoardColumn
       v-for="(column, columnIndex) in board.columns"
       :key="column.name"
@@ -55,15 +58,11 @@ const createColumn = (event: KeyboardEvent) => {
 
 <style lang="css">
 .board {
-  @apply flex items-start;
+  @apply grid grid-flow-col items-start gap-4 p-4 overflow-auto min-h-full;
 }
 
 .task {
   @apply flex items-center flex-wrap shadow mb-2 py-2 px-2 rounded bg-white text-gray-900 no-underline;
-}
-
-.board {
-  @apply p-4 bg-slate-700 h-full overflow-auto;
 }
 
 .task-bg {

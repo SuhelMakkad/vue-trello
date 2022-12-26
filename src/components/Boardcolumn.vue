@@ -7,7 +7,7 @@
     @drop="moveTaskOrColumn($event, column.tasks, columnIndex)"
     @dragstart.self="pickupColumn($event, columnIndex)"
   >
-    <div class="flex items-center mb-2 font-bold capitalize">
+    <div class="flex items-center sticky top-0 bg-gray-200 pt-2 mb-2 font-bold capitalize">
       {{ column.name }}
     </div>
 
@@ -23,7 +23,7 @@
       <input
         type="text"
         placeholder="+ Enter New Task"
-        class="w-full p-2 bg-transparent border-none outline-none"
+        class="sticky bottom-0 bg-gray-200 w-full p-2 pb-4 bg-transparent border-none outline-none"
         @keyup.enter="createTask($event, column.name)"
       />
     </div>
@@ -129,7 +129,7 @@ const moveColumn = (event: DragEvent, toColumnIndex: number) => {
 
 <style scoped>
 .column {
-  @apply bg-gray-200 p-2 mr-4 text-left shadow rounded;
+  @apply bg-gray-200 px-2 max-h-[90%] text-left shadow rounded overflow-hidden hover:overflow-auto;
   min-width: 350px;
 }
 </style>

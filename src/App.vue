@@ -1,21 +1,5 @@
 <template>
-  <div id="app" class="mx-auto">
+  <div class="min-h-screen mx-auto">
     <router-view />
   </div>
 </template>
-
-<style>
-body, html {
-  height: 100%;
-}
-
-#app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  height: 100%;
-}
-
-</style>
