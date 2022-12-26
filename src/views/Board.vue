@@ -48,6 +48,15 @@
         />
       </div>
     </div>
+
+    <div class="column">
+      <input
+        type="text"
+        placeholder="+ New Column"
+        class="w-full p-2 font-bold bg-transparent border-none outline-none"
+        @keyup.enter="createColumn"
+      />
+    </div>
   </div>
 
   <div v-if="isTaskOpen" class="task-bg" @click.self="closeModal">
@@ -78,6 +87,14 @@ const closeModal = () => {
   router.push({
     name: "Board",
   });
+};
+
+const createColumn = (event: KeyboardEvent) => {
+  const target = event.target as HTMLInputElement;
+  const value = target.value;
+
+  store.commit("CREATE_COLUMN", { name: value });
+  target.value = "";
 };
 
 const createTask = (event: KeyboardEvent, columnName: string) => {
@@ -119,7 +136,12 @@ const pickupColumn = (event: DragEvent, fromColumnIndex: number) => {
   event.dataTransfer.setData("drag-type", "column");
 };
 
-const moveTaskOrColumn = (event: DragEvent, toTasks: Task[], columnIndex: number, taskIndex?: number) => {
+const moveTaskOrColumn = (
+  event: DragEvent,
+  toTasks: Task[],
+  columnIndex: number,
+  taskIndex?: number
+) => {
   if (!event.dataTransfer) return;
 
   const type = event.dataTransfer.getData("drag-type");

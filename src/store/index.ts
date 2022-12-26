@@ -28,6 +28,13 @@ const store = {
   },
 
   mutations: {
+    CREATE_COLUMN(state: StoreStateType, { name }: { name: string }) {
+      state.board.columns.push({
+        name,
+        tasks: [],
+      });
+    },
+
     CREATE_TASK(state: StoreStateType, { task, columnName }: { task: Task; columnName: string }) {
       const column = state.board.columns.find((column) => column.name === columnName);
       if (!column) return;
