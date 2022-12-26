@@ -5,9 +5,9 @@
       v-for="(column, columnIndex) in board.columns"
       :key="column.name"
       :draggable="true"
-      @drop="moveTaskOrColumn($event, columnIndex, column.tasks)"
       @dragover.prevent
       @dragenter.prevent
+      @drop="moveTaskOrColumn($event, column.tasks, columnIndex)"
       @dragstart.self="pickupColumn($event, columnIndex)"
     >
       <div class="flex items-center mb-2 font-bold">
@@ -25,7 +25,10 @@
             v-if="task"
             class="task"
             :draggable="true"
+            @dragover.prevent
+            @dragenter.prevent
             @dragstart="pickupTask($event, taskIndex, columnIndex)"
+            @drop.stop="moveTaskOrColumn($event, column.tasks, columnIndex, taskIndex)"
           >
             <span class="w-full flex-shrink-0 font-medium">
               {{ task.name }}
@@ -116,29 +119,30 @@ const pickupColumn = (event: DragEvent, fromColumnIndex: number) => {
   event.dataTransfer.setData("drag-type", "column");
 };
 
-const moveTaskOrColumn = (event: DragEvent, columnIndex: number, toTasks: Task[]) => {
+const moveTaskOrColumn = (event: DragEvent, toTasks: Task[], columnIndex: number, taskIndex?: number) => {
   if (!event.dataTransfer) return;
 
   const type = event.dataTransfer.getData("drag-type");
 
   if (type === "task") {
-    moveTask(event, toTasks);
+    moveTask(event, toTasks, taskIndex);
   } else if (type === "column") {
     moveColumn(event, columnIndex);
   }
 };
 
-const moveTask = (event: DragEvent, toTasks: Task[]) => {
+const moveTask = (event: DragEvent, toTasks: Task[], toTaskIndex?: number) => {
   if (!event.dataTransfer) return;
 
-  const taskIndex = +event.dataTransfer.getData("task-index");
+  const fromTaskIndex = +event.dataTransfer.getData("task-index");
   const fromColumnIndex = +event.dataTransfer.getData("from-column-index");
   const fromTasks = board.value.columns[fromColumnIndex].tasks;
 
   store.commit("MOVE_TASK", {
     fromTasks,
     toTasks,
-    taskIndex,
+    fromTaskIndex,
+    toTaskIndex,
   });
 };
 
