@@ -17,7 +17,7 @@
         :key="task?.id"
         :task="task"
         @drop-task="moveTaskOrColumn($event, column.tasks, columnIndex, taskIndex)"
-        @drag-start="pickupTask($event, columnIndex, columnIndex)"
+        @drag-start="pickupTask($event, taskIndex, columnIndex)"
       />
 
       <input
@@ -34,7 +34,7 @@
 import { computed } from "vue";
 import { useStore } from "vuex";
 
-import BoardTask from "../components/BoardTask.vue";
+import BoardTask from "./BoardTask.vue";
 
 import { v4 as uuid } from "uuid";
 import type { BoardColumnType, StoreStateType, Task } from "../store/types";
