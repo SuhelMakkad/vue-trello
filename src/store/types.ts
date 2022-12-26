@@ -5,14 +5,14 @@ export type Task = {
   userAssigned?: string | null;
 };
 
-export type BoardColumn = {
+export type BoardColumnType = {
   name: string;
   tasks: Task[];
 };
 
 export type BoardType = {
   name: string;
-  columns: BoardColumn[];
+  columns: BoardColumnType[];
 };
 
 export type StoreStateType = {

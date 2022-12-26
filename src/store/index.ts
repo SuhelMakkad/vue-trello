@@ -1,9 +1,8 @@
 import { createStore } from "vuex";
-
 import { saveStatePlugin } from "../utils";
 import defaultBoard from "../default-board";
 
-import type { StoreStateType, BoardType, Task, BoardColumn } from "./types";
+import type { StoreStateType, BoardType, Task, BoardColumnType } from "./types";
 
 const board: BoardType = JSON.parse(localStorage.getItem("board")!) || defaultBoard;
 
