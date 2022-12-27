@@ -40,6 +40,14 @@ const store = {
       column.tasks.push(task);
     },
 
+    DELETE_TASK(
+      state: StoreStateType,
+      { columnIndex, taskIndex }: { columnIndex: number; taskIndex: number }
+    ) {
+      const column = state.board.columns[columnIndex];
+      column.tasks.splice(taskIndex, 1);
+    },
+
     UPDATE_TASK(
       state: StoreStateType,
       { task, key, value }: { task: Task; key: keyof Task; value: string }

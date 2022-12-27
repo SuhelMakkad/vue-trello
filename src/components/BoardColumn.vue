@@ -20,6 +20,7 @@
         :task="task"
         @drop-task="moveTaskOrColumn($event, column.tasks, columnIndex, taskIndex)"
         @drag-start="pickupTask($event, taskIndex, columnIndex)"
+        @delete-task="deleteTask(taskIndex)"
       />
 
       <form
@@ -46,7 +47,7 @@ import BoardTask from "./BoardTask.vue";
 import { v4 as uuid } from "uuid";
 import type { BoardColumnType, StoreStateType, Task } from "../store/types";
 
-defineProps<{ column: BoardColumnType; columnIndex: number }>();
+const props = defineProps<{ column: BoardColumnType; columnIndex: number }>();
 
 const store = useStore<StoreStateType>();
 const board = computed(() => store.state.board);
@@ -69,6 +70,13 @@ const createTask = (columnName: string) => {
   });
 
   newTaskName.value = "";
+};
+
+const deleteTask = (taskIndex: number) => {
+  store.commit("DELETE_TASK", {
+    columnIndex: props.columnIndex,
+    taskIndex,
+  });
 };
 
 const pickupTask = (event: DragEvent, taskIndex: number, columnIndex: number) => {
