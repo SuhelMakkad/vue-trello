@@ -11,8 +11,9 @@
     >
       <span
         class="flex-shrink-0 w-full max-w-full overflow-hidden text-ellipsis font-medium capitalize"
+        :class="{ 'text-gray-400': !task.name }"
       >
-        {{ task.name }}
+        {{ task.name || "Untitled" }}
       </span>
 
       <span v-if="task.description" class="w-full flex-shrink-0 mt-2 capitalize leading-normal">
