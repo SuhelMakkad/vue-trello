@@ -1,7 +1,7 @@
 <template>
   <div
     v-if="task"
-    class="task cursor-pointer group"
+    class="task cursor-pointer group/task"
     :draggable="true"
     @dragover.prevent
     @dragenter.prevent
@@ -18,7 +18,7 @@
       </span>
 
       <button
-        class="transition-transform origin-right scale-x-0 group-hover:scale-x-100"
+        class="transition-transform origin-right scale-x-0 group-hover/task:scale-x-100"
         @click.prevent="deleteTask"
       >
         <DeleteIcon class="text-red-400 shrink-0 w-6" />

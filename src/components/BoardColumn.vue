@@ -1,16 +1,28 @@
 <template>
   <div
-    class="
-      bg-gray-200 px-2 text-left shadow rounded overflow-auto scroll-w-0
-    "
+    class="bg-gray-200 px-2 text-left shadow rounded overflow-auto scroll-w-0"
     :draggable="true"
     @dragover.prevent
     @dragenter.prevent
     @drop="moveTaskOrColumn($event, column.tasks, columnIndex)"
     @dragstart.self="pickupColumn($event, columnIndex)"
   >
-    <div class="flex items-center sticky top-0 bg-gray-200 pt-2 pb-2 font-bold capitalize">
-      {{ column.name }}
+    <div
+      class="group/column-name sticky top-0 flex items-center justify-between w-full max-w-full bg-gray-200 pt-2 pb-2 font-bold capitalize"
+    >
+      <span
+        class="flex-shrink-0 flex-1 overflow-hidden text-ellipsis font-medium capitalize"
+        :class="{ 'text-gray-400': !column.name }"
+      >
+        {{ column.name || "Untitled" }}
+      </span>
+
+      <button
+        class="transition-transform origin-right scale-x-0 group-hover/column-name:scale-x-100"
+        @click="deleteColumn"
+      >
+        <DeleteIcon class="text-red-400 shrink-0 w-6" />
+      </button>
     </div>
 
     <div class="list-reset">
@@ -43,6 +55,7 @@ import { ref, computed } from "vue";
 import { useStore } from "vuex";
 
 import BoardTask from "./BoardTask.vue";
+import DeleteIcon from "./DeleteIcon.vue";
 
 import { v4 as uuid } from "uuid";
 import type { BoardColumnType, StoreStateType, Task } from "../store/types";
@@ -70,6 +83,12 @@ const createTask = (columnName: string) => {
   });
 
   newTaskName.value = "";
+};
+
+const deleteColumn = () => {
+  store.commit("DELETE_COLUMN", {
+    columnIndex: props.columnIndex,
+  });
 };
 
 const deleteTask = (taskIndex: number) => {

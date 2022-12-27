@@ -2,7 +2,7 @@ import { createStore } from "vuex";
 import { saveStatePlugin } from "../utils";
 import defaultBoard from "../default-board";
 
-import type { StoreStateType, BoardType, Task, BoardColumnType } from "./types";
+import type { StoreStateType, BoardType, Task } from "./types";
 
 const board: BoardType = JSON.parse(localStorage.getItem("board")!) || defaultBoard;
 
@@ -31,6 +31,10 @@ const store = {
         name,
         tasks: [],
       });
+    },
+
+    DELETE_COLUMN(state: StoreStateType, { columnIndex }: { columnIndex: number }) {
+      state.board.columns.splice(columnIndex, 1);
     },
 
     CREATE_TASK(state: StoreStateType, { task, columnName }: { task: Task; columnName: string }) {
