@@ -1,13 +1,15 @@
 <template>
   <div
-    class="column"
+    class="
+      bg-gray-200 px-2 text-left shadow rounded overflow-auto scroll-w-0
+    "
     :draggable="true"
     @dragover.prevent
     @dragenter.prevent
     @drop="moveTaskOrColumn($event, column.tasks, columnIndex)"
     @dragstart.self="pickupColumn($event, columnIndex)"
   >
-    <div class="flex items-center sticky top-0 bg-gray-200 pt-2 mb-2 font-bold capitalize">
+    <div class="flex items-center sticky top-0 bg-gray-200 pt-2 pb-2 font-bold capitalize">
       {{ column.name }}
     </div>
 
@@ -20,18 +22,23 @@
         @drag-start="pickupTask($event, taskIndex, columnIndex)"
       />
 
-      <input
-        type="text"
-        placeholder="+ Enter New Task"
-        class="sticky bottom-0 bg-gray-200 w-full p-2 pb-4 bg-transparent border-none outline-none"
-        @keyup.enter="createTask($event, column.name)"
-      />
+      <form
+        class="sticky bottom-0 bg-gray-200 w-full p-2 pb-4"
+        @submit.prevent="createTask(column.name)"
+      >
+        <input
+          type="text"
+          placeholder="+ Enter New Task"
+          class="bg-transparent border-none outline-none"
+          v-model="newTaskName"
+        />
+      </form>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { computed } from "vue";
+import { ref, computed } from "vue";
 import { useStore } from "vuex";
 
 import BoardTask from "./BoardTask.vue";
@@ -42,12 +49,13 @@ import type { BoardColumnType, StoreStateType, Task } from "../store/types";
 defineProps<{ column: BoardColumnType; columnIndex: number }>();
 
 const store = useStore<StoreStateType>();
-
 const board = computed(() => store.state.board);
 
-const createTask = (event: KeyboardEvent, columnName: string) => {
-  const target = event.target as HTMLInputElement;
-  const value = target.value;
+const newTaskName = ref("");
+
+const createTask = (columnName: string) => {
+  const value = newTaskName.value;
+  if (!value) return;
 
   const task: Task = {
     id: uuid(),
@@ -60,7 +68,7 @@ const createTask = (event: KeyboardEvent, columnName: string) => {
     columnName,
   });
 
-  target.value = "";
+  newTaskName.value = "";
 };
 
 const pickupTask = (event: DragEvent, taskIndex: number, columnIndex: number) => {
@@ -126,10 +134,3 @@ const moveColumn = (event: DragEvent, toColumnIndex: number) => {
   });
 };
 </script>
-
-<style scoped>
-.column {
-  @apply bg-gray-200 px-2 max-h-[90%] text-left shadow rounded overflow-hidden hover:overflow-auto;
-  min-width: 350px;
-}
-</style>

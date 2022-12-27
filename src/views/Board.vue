@@ -2,7 +2,6 @@
   <h1 class="px-4 py-2 text-white text-3xl font-medium">My Board</h1>
 
   <div class="board">
-    
     <BoardColumn
       v-for="(column, columnIndex) in board.columns"
       :key="column.name"
@@ -10,14 +9,17 @@
       :columnIndex="columnIndex"
     />
 
-    <div class="column">
+    <form
+      class="bg-gray-200 px-2 max-h-[90%] min-w-[20rem] text-left shadow rounded overflow-hidden hover:overflow-auto"
+      @submit.prevent="createColumn"
+    >
       <input
         type="text"
         placeholder="+ New Column"
-        class="w-full p-2 font-bold bg-transparent border-none outline-none"
-        @keyup.enter="createColumn"
+        class="w-full p-2 font-bold bg-transparent border-none outline-none capitalize"
+        v-model="newColumnName"
       />
-    </div>
+    </form>
   </div>
 
   <div v-if="isTaskOpen" class="task-bg" @click.self="closeModal">
@@ -26,7 +28,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed } from "vue";
+import { ref, computed } from "vue";
 import { useStore } from "vuex";
 import { useRoute, useRouter } from "vue-router";
 
@@ -41,24 +43,30 @@ const router = useRouter();
 const board = computed(() => store.state.board);
 const isTaskOpen = computed(() => route.name === "Task");
 
+const newColumnName = ref("");
+
 const closeModal = () => {
   router.push({
     name: "Board",
   });
 };
 
-const createColumn = (event: KeyboardEvent) => {
-  const target = event.target as HTMLInputElement;
-  const value = target.value;
+const createColumn = () => {
+  const value = newColumnName.value;
+  if (!value) return;
 
   store.commit("CREATE_COLUMN", { name: value });
-  target.value = "";
+  newColumnName.value = "";
 };
 </script>
 
 <style lang="css">
 .board {
-  @apply grid grid-flow-col items-start gap-4 p-4 overflow-auto min-h-full;
+  @apply flex items-start gap-4 p-4 overflow-auto min-h-full;
+}
+
+.board > * {
+  @apply flex-1 min-w-[18.75rem];
 }
 
 .task {

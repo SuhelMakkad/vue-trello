@@ -4,7 +4,6 @@
 
 ::-webkit-scrollbar {
   @apply w-2 h-2;
-
 }
 
 ::-webkit-scrollbar-track {
@@ -13,4 +12,10 @@
 
 ::-webkit-scrollbar-thumb {
   @apply bg-slate-400 rounded-md;
+}
+
+@layer base {
+  .scroll-w-0::-webkit-scrollbar {
+    @apply w-0 h-0;
+  }
 }
