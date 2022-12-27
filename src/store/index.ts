@@ -26,6 +26,10 @@ const store = {
   },
 
   mutations: {
+    UPDATE_NAME(state: StoreStateType, { name }: { name: string }) {
+      state.board.name = name;
+    },
+
     CREATE_COLUMN(state: StoreStateType, { name }: { name: string }) {
       state.board.columns.push({
         name,

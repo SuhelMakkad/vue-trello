@@ -1,5 +1,23 @@
 <template>
-  <h1 class="px-4 py-2 text-white text-3xl font-medium">My Board</h1>
+  <form class="group/title flex items-center gap-4 px-4 py-2" @submit.prevent="updateBoardName">
+    <input
+      class="
+        text-white text-3xl font-medium capitalize 
+        bg-transparent w-auto max-w-full flex-1
+        focus:border-none focus:outline-none
+      "
+      v-model="boardName"
+      id="board-name-input"
+      @input="updateBoardName"
+    />
+
+    <label
+      for="board-name-input"
+      class="translate-y-1 origin-right scale-x-0 group-hover/title:scale-x-100 transition-transform"
+    >
+      <EditIcon class="text-gray-400 text-3xl" />
+    </label>
+  </form>
 
   <div class="board">
     <BoardColumn
@@ -33,6 +51,7 @@ import { useStore } from "vuex";
 import { useRoute, useRouter } from "vue-router";
 
 import BoardColumn from "../components/BoardColumn.vue";
+import EditIcon from "../components/EditIcon.vue";
 
 import type { StoreStateType } from "../store/types";
 
@@ -43,7 +62,12 @@ const router = useRouter();
 const board = computed(() => store.state.board);
 const isTaskOpen = computed(() => route.name === "Task");
 
+const boardName = ref(store.state.board?.name);
 const newColumnName = ref("");
+
+const updateBoardName = () => {
+  store.commit("UPDATE_NAME", { name: boardName.value });
+};
 
 const closeModal = () => {
   router.push({
