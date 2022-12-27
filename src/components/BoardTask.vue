@@ -9,23 +9,26 @@
       @dragstart="dragstart"
       @drop.stop="drop"
     >
-      <span class="w-full flex-shrink-0 font-medium">
+      <span
+        class="flex-shrink-0 w-full max-w-full overflow-hidden text-ellipsis font-medium capitalize"
+      >
         {{ task.name }}
       </span>
 
-      <span v-if="task.description" class="w-full flex-shrink-0 mt-4">
-        {{ task.description }}
+      <span v-if="task.description" class="w-full flex-shrink-0 mt-2 capitalize leading-normal">
+        {{ truncatedDescription }}
       </span>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
+import { computed } from "vue";
 import { useRouter } from "vue-router";
 
 import type { Task } from "../store/types";
 
-defineProps<{ task: Task }>();
+const props = defineProps<{ task: Task }>();
 
 const emits = defineEmits<{
   (e: "drag-start", event: DragEvent): void;
@@ -33,6 +36,18 @@ const emits = defineEmits<{
 }>();
 
 const router = useRouter();
+
+const truncatedDescription = computed(() => {
+  const description = props.task.description;
+  if (!description) return;
+
+  const maxLength = 75;
+  if (description.length < maxLength) {
+    return description;
+  }
+
+  return `${description.substring(0, maxLength)}...`;
+});
 
 const openModal = (id: string) => router.push({ name: "Task", params: { id } });
 
@@ -44,10 +59,3 @@ const drop = (event: DragEvent) => {
   emits("drop-task", event);
 };
 </script>
-
-<style scoped>
-.column {
-  @apply bg-gray-200 p-2 mr-4 text-left shadow rounded;
-  min-width: 350px;
-}
-</style>
